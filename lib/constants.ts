@@ -101,7 +101,7 @@ export const OPPORTUNITIES = [
     ],
     clusterIcons: [
       { src: `${ASSET_BASE}/1691829322canva-app-logo-png.png` },
-      { src: `${ASSET_BASE}/antigravity-icon__full-color.png` },
+      { src: `${ASSET_BASE}/claude-ai-logo-rounded-hd-free-png.webp` },
       { src: `${ASSET_BASE}/Notion-Logo.png` },
     ],
   },
