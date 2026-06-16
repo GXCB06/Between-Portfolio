@@ -227,7 +227,7 @@ export function InfographicModal({
 
           {/* ── Image container with touch handlers ── */}
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden px-4 py-4"
+            className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto px-4 py-8 md:py-12"
             role="dialog"
             aria-modal="true"
             aria-label={title}
@@ -235,11 +235,12 @@ export function InfographicModal({
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
             style={{ touchAction: "none" }}
+            onClick={handleBackdropClick}
           >
-            {/* Entry animation wrapper */}
+            {/* Entry animation wrapper — stopPropagation so clicks on image don't close */}
             <motion.div
               key="modal-entry"
-              className="w-full max-w-[960px]"
+              className="w-full max-w-[960px] my-auto flex items-center justify-center"
               initial={{ opacity: 0, scale: 0.95, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
@@ -263,7 +264,7 @@ export function InfographicModal({
                   alt={title}
                   width={960}
                   height={1200}
-                  className="h-auto w-full rounded-2xl object-contain shadow-[0_32px_96px_rgba(0,0,0,0.35)]"
+                  className="h-auto w-full max-h-[calc(100vh-6rem)] rounded-2xl object-contain shadow-[0_32px_96px_rgba(0,0,0,0.35)]"
                   priority
                   draggable={false}
                 />

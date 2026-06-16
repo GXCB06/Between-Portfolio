@@ -1,7 +1,7 @@
 export const PORTFOLIO_ARCHIVE_URL =
   "https://drive.google.com/drive/folders/1TySD6JnlQA3Agvcfw1M_ZvgyOcIXUFfs?usp=sharing";
 
-export const CONTACT_URL = "https://openlink.co/gxcb";
+export const CONTACT_URL = "https://www.openlink.co/gxcb";
 
 export const PORTFOLIO_SECTION_ID = "portfolio-showcase";
 export const OPPORTUNITIES_SECTION_ID = "currently-looking-for";
