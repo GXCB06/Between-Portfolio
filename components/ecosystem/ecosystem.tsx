@@ -22,6 +22,11 @@ export function Ecosystem() {
             const size = logo.size;
             const height = "height" in logo ? logo.height : size;
 
+            // Use CSS animation instead of Framer Motion's JS-driven animate loop.
+            // Each logo gets a unique duration and delay via CSS custom properties.
+            const floatDuration = 3.5 + (index % 3) * 0.4;
+            const floatDelay = index * 0.15;
+
             return (
               <motion.div
                 key={logo.name}
@@ -41,14 +46,12 @@ export function Ecosystem() {
                   ease: [0.16, 1, 0.3, 1],
                 }}
               >
-                <motion.div
-                  className="h-full w-full rounded-[14px] bg-white p-1 shadow-[0_0_8px_rgba(0,0,0,0.03),0_1px_17px_rgba(0,0,0,0.08)]"
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{
-                    duration: 3.5 + (index % 3) * 0.4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: index * 0.15,
+                {/* CSS float animation — runs on compositor thread, zero JS overhead */}
+                <div
+                  className="ecosystem-float h-full w-full rounded-[14px] bg-white p-1 shadow-[0_0_8px_rgba(0,0,0,0.03),0_1px_17px_rgba(0,0,0,0.08)]"
+                  style={{
+                    animationDuration: `${floatDuration}s`,
+                    animationDelay: `${floatDelay}s`,
                   }}
                 >
                   <Image
@@ -57,8 +60,9 @@ export function Ecosystem() {
                     width={size}
                     height={height}
                     className="h-full w-full rounded-[14px] object-contain"
+                    loading="lazy"
                   />
-                </motion.div>
+                </div>
               </motion.div>
             );
           })}
@@ -109,6 +113,7 @@ export function Ecosystem() {
                 width={32}
                 height={32}
                 className="h-8 w-8 object-contain"
+                loading="lazy"
               />
             </div>
           ))}

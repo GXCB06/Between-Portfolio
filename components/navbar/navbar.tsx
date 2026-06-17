@@ -42,7 +42,8 @@ export function Navbar() {
           className={cn(
             "grid h-[52px] w-full max-w-[543px] grid-cols-[auto_auto] items-center justify-between gap-2 md:grid-cols-[auto_1fr_auto] md:h-[57px]",
             "rounded-[55px] bg-[rgba(242,242,242,0.85)] px-4 sm:px-6",
-            "shadow-[0_4px_20px_rgba(0,0,0,0.06)] backdrop-blur-xl"
+            "shadow-[0_4px_20px_rgba(0,0,0,0.06)] backdrop-blur-xl",
+            "[will-change:backdrop-filter]"
           )}
         >
           {/* Brand */}

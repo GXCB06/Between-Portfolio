@@ -265,7 +265,7 @@ export function InfographicModal({
                   width={960}
                   height={1200}
                   className="h-auto w-full max-h-[calc(100vh-6rem)] rounded-2xl object-contain shadow-[0_32px_96px_rgba(0,0,0,0.35)]"
-                  priority
+                  loading="lazy"
                   draggable={false}
                 />
               </div>

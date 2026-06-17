@@ -5,7 +5,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
-import { InfiniteGallery } from "@/components/project-gallery/infinite-gallery";
+import { InfiniteGallery } from "@/components/project-gallery/gallery-carousel";
 import {
   EXTERNAL_LINK_PROPS,
   PORTFOLIO_ARCHIVE_URL,
@@ -71,13 +71,13 @@ export function ProjectGallery({ categories }: ProjectGalleryProps) {
       </div>
 
       <div className="mt-10 md:mt-12" role="tabpanel">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           <motion.div
             key={activeCategory}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
           >
             {currentCategory.items.length > 0 ? (
               <InfiniteGallery

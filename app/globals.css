@@ -15,6 +15,7 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  text-rendering: optimizeSpeed;
 }
 
 body {
@@ -34,4 +35,39 @@ body {
 :focus-visible {
   outline: 2px solid #111111;
   outline-offset: 2px;
+}
+
+/* ─── Performance: GPU-accelerated floating animation ───────────────────
+   Replaces Framer Motion's JS-driven infinite animate loops.
+   Runs entirely on the compositor thread → zero main-thread cost. */
+@keyframes ecosystem-float {
+  0%, 100% { transform: translateY(0) translateZ(0); }
+  50%      { transform: translateY(-8px) translateZ(0); }
+}
+
+.ecosystem-float {
+  animation-name: ecosystem-float;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  will-change: transform;
+}
+
+/* ─── Performance: Prefer reduced motion ────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .ecosystem-float {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

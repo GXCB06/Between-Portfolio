@@ -1,13 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import {
-  motion,
-  useMotionValue,
-  useTransform,
-  type MotionValue,
-} from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import type { PortfolioItem } from "@/lib/portfolio-types";
 import { cn } from "@/lib/utils";
 
@@ -24,38 +19,22 @@ interface InfiniteGalleryProps {
   categoryKey: string;
 }
 
-function GalleryCard({
+/**
+ * Memoized gallery card — prevents re-renders when parent state changes.
+ * Uses pure CSS for visual effects instead of per-card JS useTransform callbacks.
+ */
+const GalleryCard = memo(function GalleryCard({
   item,
-  index,
-  x,
-  containerWidth,
 }: {
   item: PortfolioItem;
-  index: number;
-  x: MotionValue<number>;
-  containerWidth: number;
 }) {
-  const scale = useTransform(x, (latest) => {
-    const cardCenter = index * CARD_STRIDE + CARD_WIDTH / 2 + latest;
-    const distance = Math.abs(cardCenter - containerWidth / 2);
-    const focus = Math.max(0, 1 - distance / (containerWidth * 0.45));
-    return 0.92 + focus * 0.13;
-  });
-
-  const opacity = useTransform(x, (latest) => {
-    const cardCenter = index * CARD_STRIDE + CARD_WIDTH / 2 + latest;
-    const distance = Math.abs(cardCenter - containerWidth / 2);
-    const focus = Math.max(0, 1 - distance / (containerWidth * 0.45));
-    return 0.75 + focus * 0.25;
-  });
-
   return (
-    <motion.article
-      style={{ scale, opacity }}
+    <article
       className={cn(
-        "relative shrink-0 overflow-hidden rounded-[10px] bg-white",
-        "shadow-[0_0_4px_rgba(0,0,0,0.25)] will-change-transform"
+        "gallery-card relative shrink-0 overflow-hidden rounded-[10px] bg-white",
+        "shadow-[0_0_4px_rgba(0,0,0,0.25)]"
       )}
+      style={{ willChange: "transform", transform: "translateZ(0)" }}
     >
       {/* Mobile size */}
       <div
@@ -69,6 +48,7 @@ function GalleryCard({
           sizes="200px"
           className="object-cover"
           draggable={false}
+          loading="lazy"
         />
       </div>
       {/* Desktop size */}
@@ -83,34 +63,51 @@ function GalleryCard({
           sizes="277px"
           className="object-cover"
           draggable={false}
+          loading="lazy"
         />
       </div>
-    </motion.article>
+    </article>
   );
-}
+});
 
 export function InfiniteGallery({ items, categoryKey }: InfiniteGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const [containerWidth, setContainerWidth] = useState(1200);
-  const [isPaused, setIsPaused] = useState(false);
+  const isPausedRef = useRef(false);
   const isDraggingRef = useRef(false);
   const rafRef = useRef<number | null>(null);
 
-  const loopItems = [...items, ...items, ...items];
+  // Stabilize the tripled items array — only recalculate when items change
+  const loopItems = useMemo(
+    () => [...items, ...items, ...items],
+    [items]
+  );
   const singleSetWidth = items.length * CARD_STRIDE;
 
+  // Debounced resize handler
   useEffect(() => {
+    let resizeTimer: ReturnType<typeof setTimeout>;
     const measure = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
-      }
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (containerRef.current) {
+          setContainerWidth(containerRef.current.offsetWidth);
+        }
+      }, 100);
     };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    // Initial measure (immediate)
+    if (containerRef.current) {
+      setContainerWidth(containerRef.current.offsetWidth);
+    }
+    window.addEventListener("resize", measure, { passive: true });
+    return () => {
+      clearTimeout(resizeTimer);
+      window.removeEventListener("resize", measure);
+    };
   }, []);
 
+  // Reset position on category change
   useEffect(() => {
     if (singleSetWidth > 0) {
       x.set(-singleSetWidth);
@@ -128,6 +125,7 @@ export function InfiniteGallery({ items, categoryKey }: InfiniteGalleryProps) {
     [singleSetWidth]
   );
 
+  // Single RAF loop — drives the auto-scroll. No per-card JS transforms.
   useEffect(() => {
     let lastTime = performance.now();
 
@@ -135,7 +133,7 @@ export function InfiniteGallery({ items, categoryKey }: InfiniteGalleryProps) {
       const delta = time - lastTime;
       lastTime = time;
 
-      if (!isPaused && !isDraggingRef.current && singleSetWidth > 0) {
+      if (!isPausedRef.current && !isDraggingRef.current && singleSetWidth > 0) {
         const next = normalizePosition(
           x.get() - SCROLL_SPEED * (delta / 16.67)
         );
@@ -149,7 +147,10 @@ export function InfiniteGallery({ items, categoryKey }: InfiniteGalleryProps) {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [isPaused, normalizePosition, singleSetWidth, x]);
+  }, [normalizePosition, singleSetWidth, x]);
+
+  const handlePause = useCallback(() => { isPausedRef.current = true; }, []);
+  const handleResume = useCallback(() => { isPausedRef.current = false; }, []);
 
   if (items.length === 0) return null;
 
@@ -157,10 +158,10 @@ export function InfiniteGallery({ items, categoryKey }: InfiniteGalleryProps) {
     <div
       ref={containerRef}
       className="relative w-full overflow-hidden py-2"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => setIsPaused(false)}
+      onMouseEnter={handlePause}
+      onMouseLeave={handleResume}
+      onTouchStart={handlePause}
+      onTouchEnd={handleResume}
     >
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-white via-white/80 to-transparent md:w-20" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-white via-white/80 to-transparent md:w-20" />
@@ -169,15 +170,15 @@ export function InfiniteGallery({ items, categoryKey }: InfiniteGalleryProps) {
         drag="x"
         dragElastic={0.05}
         dragMomentum={false}
-        style={{ x }}
+        style={{ x, willChange: "transform", transform: "translateZ(0)" }}
         onDragStart={() => {
           isDraggingRef.current = true;
-          setIsPaused(true);
+          isPausedRef.current = true;
         }}
         onDragEnd={() => {
           x.set(normalizePosition(x.get()));
           isDraggingRef.current = false;
-          setIsPaused(false);
+          isPausedRef.current = false;
         }}
         className="flex cursor-grab gap-6 active:cursor-grabbing"
       >
@@ -185,9 +186,6 @@ export function InfiniteGallery({ items, categoryKey }: InfiniteGalleryProps) {
           <GalleryCard
             key={`${categoryKey}-${item.id}-${index}`}
             item={item}
-            index={index}
-            x={x}
-            containerWidth={containerWidth}
           />
         ))}
       </motion.div>

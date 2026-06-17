@@ -21,7 +21,7 @@ export function FadeIn({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, margin: "-80px" }}
       variants={variants}
       transition={{ delay }}
       className={className}
@@ -41,7 +41,7 @@ export function StaggerContainer({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, margin: "-80px" }}
       variants={staggerContainer}
       className={className}
       {...props}
