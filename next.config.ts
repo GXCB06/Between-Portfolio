@@ -2,6 +2,28 @@ import type { NextConfig } from "next";
 
 const securityHeaders = [
   {
+    // Content Security Policy — prevents XSS by controlling resource sources
+    key: "Content-Security-Policy",
+    value: [
+      "default-src 'self'",
+      // Next.js requires unsafe-inline for its runtime style injections
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      // Next.js inline scripts + Vercel Analytics
+      "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
+      // Fonts
+      "font-src 'self' https://fonts.gstatic.com",
+      // Images: self, data URIs (Next.js placeholders), and Vercel image CDN
+      "img-src 'self' data: blob: https://between-portfolio.vercel.app",
+      // Connect: Vercel Analytics reporting endpoint
+      "connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+      // No frames, objects, or base-uri overrides
+      "frame-ancestors 'none'",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join("; "),
+  },
+  {
     // Prevent clickjacking by disallowing iframe embedding
     key: "X-Frame-Options",
     value: "DENY",
@@ -35,7 +57,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   eslint: {
-    ignoreDuringBuilds: true,
+    // Re-enabled: lint errors must be fixed before building
+    ignoreDuringBuilds: false,
   },
   typescript: {
     ignoreBuildErrors: false,

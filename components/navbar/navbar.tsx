@@ -10,10 +10,20 @@ import { NAV_LINKS, type NavAction } from "@/lib/constants";
 import {
   CONTACT_URL,
   EXTERNAL_LINK_PROPS,
+  PORTFOLIO_SECTION_ID,
+  OPPORTUNITIES_SECTION_ID,
+  ABOUT_SECTION_ID,
   scrollToAbout,
   scrollToOpportunities,
   scrollToPortfolioShowcase,
 } from "@/lib/links";
+
+// Maps NavAction keys to their section element IDs for href fallbacks
+const NAV_ACTION_TO_SECTION_ID: Record<NavAction, string> = {
+  portfolio: PORTFOLIO_SECTION_ID,
+  plan: OPPORTUNITIES_SECTION_ID,
+  about: ABOUT_SECTION_ID,
+};
 
 const navActions: Record<NavAction, () => void> = {
   portfolio: scrollToPortfolioShowcase,
@@ -59,13 +69,16 @@ export function Navbar() {
           <ul className="hidden items-center justify-center gap-4 md:flex lg:gap-5">
             {NAV_LINKS.map((link) => (
               <li key={link.label}>
-                <button
-                  type="button"
-                  onClick={() => handleNavAction(link.action)}
+                <a
+                  href={`#${NAV_ACTION_TO_SECTION_ID[link.action]}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavAction(link.action);
+                  }}
                   className="text-[14px] font-semibold text-black transition-opacity hover:opacity-70 lg:text-[15px]"
                 >
                   {link.label}
-                </button>
+                </a>
               </li>
             ))}
           </ul>
@@ -124,13 +137,16 @@ export function Navbar() {
               <ul className="flex flex-col divide-y divide-[#F2F2F2] px-5">
                 {NAV_LINKS.map((link) => (
                   <li key={link.label}>
-                    <button
-                      type="button"
-                      onClick={() => handleNavAction(link.action)}
-                      className="w-full py-4 text-left text-[16px] font-semibold text-black"
+                    <a
+                      href={`#${NAV_ACTION_TO_SECTION_ID[link.action]}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleNavAction(link.action);
+                      }}
+                      className="block w-full py-4 text-left text-[16px] font-semibold text-black"
                     >
                       {link.label}
-                    </button>
+                    </a>
                   </li>
                 ))}
               </ul>

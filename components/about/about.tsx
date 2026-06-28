@@ -18,7 +18,7 @@ export function About() {
         <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-6">
           <div className="relative h-[142px] w-[142px] overflow-hidden rounded-full border border-[#ECECEC] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)]">
             <Image
-              src="/assets/myself-photo/รูปถ่ายนิสิต - Copy.jpg"
+              src="/assets/myself-photo/profile-photo.jpg"
               alt={`${author.name} profile photo`}
               fill
               sizes="142px"

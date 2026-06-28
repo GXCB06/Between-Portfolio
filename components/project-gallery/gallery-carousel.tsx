@@ -73,7 +73,9 @@ const GalleryCard = memo(function GalleryCard({
 export function InfiniteGallery({ items, categoryKey }: InfiniteGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
-  const [containerWidth, setContainerWidth] = useState(1200);
+  // containerWidth state — value not consumed; setter kept to trigger re-render on resize
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_containerWidth, setContainerWidth] = useState(1200);
   const isPausedRef = useRef(false);
   const isDraggingRef = useRef(false);
   const rafRef = useRef<number | null>(null);

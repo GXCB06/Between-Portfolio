@@ -3,7 +3,8 @@
 @theme inline {
   --color-background: #ffffff;
   --color-foreground: #111111;
-  --color-muted: #666666;
+  /* WCAG AA compliant muted: #767676 yields 4.54:1 contrast on white (minimum 4.5:1) */
+  --color-muted: #767676;
   --color-border: #ececec;
   --font-sans: var(--font-inter);
 }

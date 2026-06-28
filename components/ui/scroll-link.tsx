@@ -2,7 +2,7 @@
 
 import { type ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { scrollToPortfolioShowcase } from "@/lib/links";
+import { scrollToPortfolioShowcase, PORTFOLIO_SECTION_ID } from "@/lib/links";
 
 interface ScrollLinkProps {
   children: ReactNode;
@@ -16,15 +16,17 @@ export function ScrollToPortfolioLink({
   onClick,
 }: ScrollLinkProps) {
   return (
-    <button
-      type="button"
-      onClick={() => {
+    // Anchor with href fallback: navigates to section without JS; onClick smooth-scrolls when JS available
+    <a
+      href={`#${PORTFOLIO_SECTION_ID}`}
+      onClick={(e) => {
+        e.preventDefault();
         scrollToPortfolioShowcase();
         onClick?.();
       }}
       className={cn(className)}
     >
       {children}
-    </button>
+    </a>
   );
 }

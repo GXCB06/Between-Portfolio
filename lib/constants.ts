@@ -31,9 +31,9 @@ export const NAV_LINKS = [
 
 export const TRUST_LOGOS = [
   { name: "Chulalongkorn University", src: "/assets/uniserity-logo/CU.jpg", width: 76, height: 40 },
-  { name: "Partner University", src: "/assets/uniserity-logo/KKU.png", width: 86, height: 45 },
+  { name: "Khon Kaen University", src: "/assets/uniserity-logo/KKU.png", width: 86, height: 45 },
   { name: "Mahasarakham University", src: "/assets/uniserity-logo/MSU.png", width: 22, height: 32 },
-  { name: "Partner Institution", src: "/assets/uniserity-logo/CMU.webp", width: 86, height: 34 },
+  { name: "Chiang Mai University", src: "/assets/uniserity-logo/CMU.webp", width: 86, height: 34 },
 ] as const;
 
 export const ECOSYSTEM_LOGOS = [
@@ -108,7 +108,7 @@ export const OPPORTUNITIES = [
   {
     id: "internship",
     title: "Internship",
-    tagline: "Global. language. Product.",
+    tagline: "Global. Language. Product.",
     taglineColor: "#FC0E82",
     description: "Cooperating in delivering mission and vision into life",
     status: "SEEKING",
@@ -148,11 +148,20 @@ export const FOOTER_LINKS = [
   { label: "Contact", action: "external" as FooterAction, href: CONTACT_URL },
 ] as const;
 
+// Individual platform URLs — update each with the real profile link when available.
+// All currently route through the link-in-bio aggregator as fallback.
+export const SOCIAL_URLS = {
+  facebook: CONTACT_URL,   // Replace with: "https://www.facebook.com/your-profile"
+  instagram: CONTACT_URL, // Replace with: "https://www.instagram.com/your-handle"
+  gmail: CONTACT_URL,     // Replace with: "mailto:your@email.com"
+  line: CONTACT_URL,      // Replace with: "https://line.me/ti/p/your-id"
+} as const;
+
 export const SOCIAL_LINKS = [
-  { name: "Facebook", href: CONTACT_URL, icon: "facebook" as const },
-  { name: "Instagram", href: CONTACT_URL, icon: "instagram" as const },
-  { name: "Gmail", href: CONTACT_URL, icon: "mail" as const },
-  { name: "Line", href: CONTACT_URL, icon: "message-circle" as const },
+  { name: "Facebook", href: SOCIAL_URLS.facebook, icon: "facebook" as const },
+  { name: "Instagram", href: SOCIAL_URLS.instagram, icon: "instagram" as const },
+  { name: "Gmail", href: SOCIAL_URLS.gmail, icon: "mail" as const },
+  { name: "Line", href: SOCIAL_URLS.line, icon: "message-circle" as const },
 ] as const;
 
 export const SECTION_IDS = {

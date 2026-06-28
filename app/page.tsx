@@ -8,6 +8,7 @@ import { CtaBanner } from "@/components/cta-banner/cta-banner";
 import { About } from "@/components/about/about";
 import { SocialConnect } from "@/components/about/social-connect";
 import { Footer } from "@/components/footer/footer";
+import { BackToTop } from "@/components/ui/back-to-top";
 import { getPortfolioCategories } from "@/lib/portfolio-data.server";
 
 export default function Home() {
@@ -16,7 +17,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main-content">
         <Hero />
         <TrustSection />
         <Ecosystem />
@@ -27,6 +28,8 @@ export default function Home() {
         <SocialConnect />
       </main>
       <Footer />
+      {/* Floating back-to-top button — appears after scrolling 400px */}
+      <BackToTop />
     </>
   );
 }

@@ -54,14 +54,16 @@ export function ProjectGallery({ categories }: ProjectGalleryProps) {
           {categories.map((category) => (
             <button
               key={category.key}
+              id={`tab-${category.key}`}
               role="tab"
               aria-selected={activeCategory === category.key}
+              aria-controls={`panel-${category.key}`}
               onClick={() => setActiveCategory(category.key)}
               className={cn(
                 "whitespace-nowrap rounded-[21px] px-3 py-2 text-[12px] font-semibold transition-all duration-300 sm:px-4",
                 activeCategory === category.key
                   ? "bg-white text-[#494949] shadow-sm"
-                  : "text-[#ADADAD] hover:text-[#666666]"
+                  : "text-[#767676] hover:text-[#444444]"
               )}
             >
               {category.label}
@@ -70,7 +72,12 @@ export function ProjectGallery({ categories }: ProjectGalleryProps) {
         </div>
       </div>
 
-      <div className="mt-10 md:mt-12" role="tabpanel">
+      <div
+        className="mt-10 md:mt-12"
+        id={`panel-${activeCategory}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${activeCategory}`}
+      >
         <AnimatePresence mode="popLayout">
           <motion.div
             key={activeCategory}

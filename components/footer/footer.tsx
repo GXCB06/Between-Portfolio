@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { FOOTER_LINKS, SOCIAL_LINKS } from "@/lib/constants";
 import {
-  CONTACT_URL,
   EXTERNAL_LINK_PROPS,
   scrollToHero,
   scrollToPortfolioShowcase,
@@ -25,7 +24,7 @@ export function Footer() {
               aria-hidden="true"
             />
           </Link>
-          <p className="mt-7 max-w-[280px] text-[15px] font-medium leading-[22px] text-[#ADADAD]">
+          <p className="mt-7 max-w-[280px] text-[15px] font-medium leading-[22px] text-[#A3A3A3]">
             Get to know my life portfolio with Between.
           </p>
         </div>
@@ -43,21 +42,21 @@ export function Footer() {
                     {link.label}
                   </Link>
                 ) : link.action === "hero" ? (
-                  <button
-                    type="button"
-                    onClick={scrollToHero}
+                  <a
+                    href="#hero"
+                    onClick={(e) => { e.preventDefault(); scrollToHero(); }}
                     className="text-[16px] font-semibold leading-[24px] text-white transition-colors hover:text-white/80"
                   >
                     {link.label}
-                  </button>
+                  </a>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={scrollToPortfolioShowcase}
+                  <a
+                    href="#portfolio-showcase"
+                    onClick={(e) => { e.preventDefault(); scrollToPortfolioShowcase(); }}
                     className="text-[16px] font-semibold leading-[24px] text-white transition-colors hover:text-white/80"
                   >
                     {link.label}
-                  </button>
+                  </a>
                 )}
               </li>
             ))}
@@ -72,11 +71,11 @@ export function Footer() {
             {SOCIAL_LINKS.map((social) => (
               <li key={social.name}>
                 <Link
-                  href={CONTACT_URL}
+                  href={social.href}
                   {...EXTERNAL_LINK_PROPS}
                   className="text-[16px] font-semibold leading-[24px] text-white transition-colors hover:text-white/80"
                 >
-                  {social.name === "Instagram" ? "Instragram" : social.name}
+                  {social.name}
                 </Link>
               </li>
             ))}
@@ -84,13 +83,13 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-10 flex max-w-[1093px] flex-col items-start justify-between gap-3 border-t border-white/10 pt-6 text-[14px] font-medium leading-[24px] text-[#ADADAD] md:flex-row md:items-center">
+      <div className="mx-auto mt-10 flex max-w-[1093px] flex-col items-start justify-between gap-3 border-t border-white/10 pt-6 text-[14px] font-medium leading-[24px] text-[#A3A3A3] md:flex-row md:items-center">
         <p>&copy; Between {new Date().getFullYear()}. All rights reserved</p>
         <div className="flex gap-8">
-          <Link href="#" className="hover:text-white/80">
+          <Link href="/privacy" className="hover:text-white/80">
             Privacy policy
           </Link>
-          <Link href="#" className="hover:text-white/80">
+          <Link href="/terms" className="hover:text-white/80">
             Terms
           </Link>
         </div>

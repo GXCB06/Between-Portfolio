@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { buttonVariants } from "@/components/ui/button";
 import { ScrollToPortfolioLink } from "@/components/ui/scroll-link";
 import { cn } from "@/lib/utils";
-import { scrollToOpportunities } from "@/lib/links";
+import { OPPORTUNITIES_SECTION_ID } from "@/lib/links";
 import { StaggerContainer, StaggerItem } from "@/components/motion/fade-in";
 
 const cardShadow = "shadow-[0_10px_30px_rgba(0,0,0,0.08)]";
@@ -55,16 +55,22 @@ export function Hero() {
             >
               View my portfolio
             </ScrollToPortfolioLink>
-            <button
-              type="button"
-              onClick={scrollToOpportunities}
+            {/* Anchor with href fallback for no-JS environments; onClick smooth-scrolls when JS is available */}
+            <a
+              href={`#${OPPORTUNITIES_SECTION_ID}`}
+              onClick={(e) => {
+                e.preventDefault();
+                import("@/lib/links").then(({ scrollToOpportunities }) =>
+                  scrollToOpportunities()
+                );
+              }}
               className={cn(
                 buttonVariants({ variant: "secondary", size: "lg" }),
                 "h-[41px] min-w-[148px] rounded-[43.5px] border-[#D1D1D1] px-4 text-[13px] font-semibold text-black"
               )}
             >
               View my plans
-            </button>
+            </a>
           </div>
         </StaggerItem>
 
